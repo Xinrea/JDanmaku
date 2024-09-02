@@ -32,6 +32,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { GiftType } from './bilibili/api/room/gift_config'
 import { InteractActionToStr, levelToName } from './utils'
 import { AfdianAPI } from './afdian/afdianapi'
+import PluginManager from './plugin_manager'
 
 const log = JLogger.getInstance('backend_service')
 
@@ -59,6 +60,8 @@ export default class BackendService {
 
   private _danmu_cache: DanmuCache = null
 
+  private _plugin_manager: PluginManager = null
+
   public constructor(store: ConfigStore, window_manager: WindowManager) {
     this._config_store = store
     this._window_manager = window_manager
@@ -66,6 +69,10 @@ export default class BackendService {
     this._config_store.onDidChange('config.max_detail_entry', (max: number) => {
       this._danmu_cache.updateMaxEntries(max)
     })
+    this._plugin_manager = new PluginManager()
+    this._plugin_manager.add(
+      '/Users/xinreasuper/Desktop/Projects/PluginExample'
+    )
   }
 
   public async Start() {
